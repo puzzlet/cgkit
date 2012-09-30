@@ -84,6 +84,35 @@ class TestSeqString(unittest.TestCase):
         self.assertEqual(False, s.match(SeqString("spam2_bla04"),-3))
 
         self.assertRaises(TypeError, lambda: s.match("spam2_bla04"))
+    
+    def testFnmatch(self):
+        """Test the fnmatch method.
+        """
+        s = SeqString("")
+        self.assertEqual(False, s.fnmatch("foo"))
+
+        s = SeqString("foo")
+        self.assertEqual(True, s.fnmatch("foo"))
+        self.assertEqual(True, s.fnmatch("f*"))
+        self.assertEqual(True, s.fnmatch("*o"))
+
+        s = SeqString("spam70.tif")
+        self.assertEqual(False, s.fnmatch("foo"))
+        self.assertEqual(True, s.fnmatch("*.tif"))
+        self.assertEqual(True, s.fnmatch("spam@.tif"))
+        self.assertEqual(True, s.fnmatch("spam@@.tif"))
+        self.assertEqual(False, s.fnmatch("spam@@@.tif"))
+        self.assertEqual(False, s.fnmatch("spam#.tif"))
+
+        s = SeqString("spam_3_42.tif")
+        self.assertEqual(True, s.fnmatch("s*_@_@@.tif"))
+        self.assertEqual(False, s.fnmatch("s*_@_@_@@.tif"))
+        self.assertEqual(False, s.fnmatch("s*_@_#.tif"))
+        self.assertEqual(True, s.fnmatch("s*_@@.tif"))
+        self.assertEqual(True, s.fnmatch("s*_@_*.tif"))
+        self.assertEqual(True, s.fnmatch("spam_3_42.tif"))
+        self.assertEqual(False, s.fnmatch("spam_03_42.tif"))
+        self.assertEqual(False, s.fnmatch("spam_4_42.tif"))
         
     def testGroupRepr(self):
         """Test the groupRepr() method.

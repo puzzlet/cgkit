@@ -41,6 +41,7 @@ import re
 import glob as _glob
 import copy
 import shutil
+import fnmatch
 
 class SeqString:
     """Sequence string class.
@@ -89,9 +90,15 @@ class SeqString:
         The number of digits is maintained. The result is the original
         string.
         """
+        return self._valueToStr(self._value)
+
+    def _valueToStr(self, valueList):
+        """Convert a value list into a string again.
         
+        valueList is a list that has the same form as self._value.
+        """
         res=""
-        for i, vn in enumerate(self._value):
+        for i, vn in enumerate(valueList):
             if i%2==0:
                 res += vn
             else:
@@ -216,12 +223,12 @@ class SeqString:
                     z = 0
 
         # Add last value
-        if (z==0):
-             res.append(textbuf)
+        if z==0:
+            res.append(textbuf)
         else:
-             numtup = (int(textbuf),numtup[1])
-             res.append(numtup)
-             res.append("")
+            numtup = (int(textbuf),numtup[1])
+            res.append(numtup)
+            res.append("")
 
         self._value = res
 
@@ -277,6 +284,75 @@ class SeqString:
             return 1
         else:
             return 0
+
+    def fnmatch(self, pattern):
+        """Match the string against a file name pattern.
+        
+        Similar to the function in the :mod:`fnmatch` module, this function
+        can be used to match the string against a pattern that may contain
+        wildcards (``"*"``, ``"?"``). Additionally, the pattern may contain
+        placeholders for numbers which is either a ``"#"`` for a 4-padded
+        number or a sequence of ``"@"`` characters for a custom padded number.
+        Note that matching against a number pattern of a certain width will
+        also match numbers whose width is larger unless they have been padded
+        with zeros.
+        Returns ``True`` if the string matches the input pattern.
+        """
+        patternList = []
+        s = pattern
+        while 1:
+            m = re.search(r"#|@+", s)
+            if m is None:
+                patternList.append(s)
+                break
+            patternList.append(s[:m.start()])
+            p = m.group()
+            if p=="#":
+                patternList.append(4)
+            else:
+                patternList.append(len(p))
+            s = s[m.end():]
+    
+        return self._fnmatch(self._value, patternList)
+    
+    def _fnmatch(self, valueList, patternList):
+        """Helper function for fnmatch.
+        
+        valueList is a list of the same form as self._value.
+        patternList is a list of the form [string, int, string, int, ...]
+        where string is a fnmatch pattern and the integer is the number of
+        digits that a number at this position must have (larger numbers are
+        allowed as well as there could have been an overflow when the original
+        string was created).
+        
+        patternList must have an odd number of items (which also means it must
+        not be empty).
+        """
+        prefixPattern = patternList[0]
+
+        # Is there only one item in patternList? Then there is no number anymore
+        # and we just have to do a normal fnmatch call...        
+        if len(patternList)==1:
+            s = self._valueToStr(valueList)
+            return fnmatch.fnmatch(s, prefixPattern) 
+        
+        numDigits = patternList[1]
+        
+        # Iterate over all numbers in the valueList and check if it fulfills
+        # the numDigits constraint. If it does, check whether the preceding
+        # string matches the string prefix pattern. If all that matches, we
+        # can call _fnmatch recursively with the remaining parts.
+        for i in range(1,len(valueList), 2):
+            val,ndig = valueList[i]
+            # Is the current number a match for the pattern?
+            if ndig==numDigits or (ndig>numDigits and not self._valueToStr(["",(val,ndig)]).startswith("0")):
+                # Check if the string prior to the number matches as well
+                prefix = self._valueToStr(valueList[:i])
+                if fnmatch.fnmatch(prefix, prefixPattern):
+                    if self._fnmatch(valueList[i+1:], patternList[2:]):
+                        return True
+    
+        return False
 
     def groupRepr(self, numChar="*"):
         """Return a template string where the numbers are replaced by the given character.
