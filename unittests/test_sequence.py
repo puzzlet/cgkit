@@ -3,6 +3,7 @@
 import unittest
 import os, os.path
 import glob as globmod
+import cgkit.sequence as sequence
 from cgkit.sequence import *
 
 def cmp(a, b):
@@ -308,6 +309,45 @@ class TestSeqString(unittest.TestCase):
         self.assertEqual("spam", str(s))
         self.assertRaises(IndexError, lambda: s.replaceStr(1, "foo"))
 
+    def testSignedNums(self):
+        """Test processing of signed numbers.
+        """
+        # Treat all numbers as unsigned numbers
+        s = SeqString("foo-1.-007.tif")
+        self.assertEqual([1,7], s.getNums())
+        self.assertEqual([1,3], s.getNumWidths())
+        self.assertEqual("foo-1.-007.tif", str(s))
+
+        # Treat all numbers as unsigned numbers (by passing signedNums explicitly)
+        s = SeqString("foo-1.-007.tif", signedNums=False)
+        self.assertEqual([1,7], s.getNums())
+        self.assertEqual([1,3], s.getNumWidths())
+        self.assertEqual("foo-1.-007.tif", str(s))
+
+        # Treat all numbers as signed numbers
+        s = SeqString("foo-1.-007.tif", signedNums=True)
+        self.assertEqual([-1,-7], s.getNums())
+        self.assertEqual([2,4], s.getNumWidths())
+        self.assertEqual("foo-1.-007.tif", str(s))
+
+        # Treat the last number as signed numbers
+        s = SeqString("foo-1.-007.tif", signedNums=[-1])
+        self.assertEqual([1,-7], s.getNums())
+        self.assertEqual([1,4], s.getNumWidths())
+        self.assertEqual("foo-1.-007.tif", str(s))
+
+        # Treat the first number as signed numbers
+        s = SeqString("foo-1.-007.tif", signedNums=[0])
+        self.assertEqual([-1,7], s.getNums())
+        self.assertEqual([2,3], s.getNumWidths())
+        self.assertEqual("foo-1.-007.tif", str(s))
+
+        # Treat both numbers as signed numbers
+        s = SeqString("foo-1.-007.tif", signedNums=[0,1])
+        self.assertEqual([-1,-7], s.getNums())
+        self.assertEqual([2,4], s.getNumWidths())
+        self.assertEqual("foo-1.-007.tif", str(s))
+        
 
 class TestRange(unittest.TestCase):
     """Test the Range object.
@@ -499,6 +539,10 @@ class TestBuildSequences(unittest.TestCase):
         self.assertEqual(1, len(seqs))
         self.assertEqual(["spam1", "spam2", "spam3"], list(seqs[0]))
 
+        seqs = buildSequences(["spam1", "spam3", "spam-1", "spam2"], signedNums=True)
+        self.assertEqual(1, len(seqs))
+        self.assertEqual(["spam-1", "spam1", "spam2", "spam3"], list(seqs[0]))
+
         seqs = buildSequences(["clip1_1", "clip2_1", "clip1_2", "clip2_2"])
         self.assertEqual(1, len(seqs))
         self.assertEqual(["clip1_1", "clip1_2", "clip2_1", "clip2_2"], list(seqs[0]))
@@ -524,6 +568,52 @@ class TestBuildSequences(unittest.TestCase):
         seqs = buildSequences(["/dir1/dir2/spam1", "/dir1/dir2/spam2"], assumeFiles=True)
         self.assertEqual(1, len(seqs))
         self.assertEqual(("/dir1/dir2/spam@", ["1-2"]), seqs[0].sequenceName())
+
+
+class TestGlob(unittest.TestCase):
+    """Test the sequence.glob() function.
+    """
+    
+    def testGlob(self):
+        """Test the sequence.glob() function.
+        """
+        for i in [1,2,10]:
+            f = open("tmp/globtstu_%d.txt"%i, "wt")
+            f.close()
+            
+        for i in [-1,-2, 1,2]:
+            f = open("tmp/globtsts_%04d.txt"%i, "wt")
+            f.close()
+
+        # Read an unsigned sequence        
+        files = sequence.glob("tmp/glob*u_")
+        self.assertEquals(1, len(files))
+        self.assertEqual(['tmp/globtstu_1.txt', 'tmp/globtstu_2.txt', 'tmp/globtstu_10.txt'], list(files[0]))
+
+        # Read an unsigned sequence using a pattern containing "@". The result must also include frame 10.
+        files = sequence.glob("tmp/globtstu_@.txt")
+        self.assertEquals(1, len(files))
+        self.assertEqual(['tmp/globtstu_1.txt', 'tmp/globtstu_2.txt', 'tmp/globtstu_10.txt'], list(files[0]))
+
+        # Read an unsigned sequence using a pattern containing "@@". The result must only include frame 10.
+        files = sequence.glob("tmp/globtstu_@@.txt")
+        self.assertEquals(1, len(files))
+        self.assertEqual(['tmp/globtstu_10.txt'], list(files[0]))
+
+        # Read a signed sequence as unsigned (the negative numbers should now not appear because they don't match the pattern)
+        files = sequence.glob("tmp/globtsts_#.txt")
+        self.assertEquals(1, len(files))
+        self.assertEquals(['tmp/globtsts_0001.txt', 'tmp/globtsts_0002.txt'], list(files[0]))
+
+        # Read a signed sequence
+        files = sequence.glob("tmp/globtsts_#.txt", signedNums=True)
+        self.assertEquals(1, len(files))
+        self.assertEquals(['tmp/globtsts_-002.txt', 'tmp/globtsts_-001.txt', 'tmp/globtsts_0001.txt', 'tmp/globtsts_0002.txt'], list(files[0]))
+
+        # Read a sequence that only consists of two digits (should return an empty list)
+        files = sequence.glob("tmp/globtsts_@@.txt")
+        self.assertEquals(0, len(files))
+
 
 class TestSeqTemplate(unittest.TestCase):
     """Test the SeqTemplate class.

@@ -39,6 +39,9 @@ Bug fixes/enhancements:
 - GLRenderer: OpenGL errors could leak through into Python and produce exceptions
   on unrelated PyOpenGL calls. The error flag is now cleared at the end of
   the C++ rendering code (bug #2974422).
+- sequence: SeqString can now optionally handle negative numbers as well.
+  The constructor takes a new argument "signedNums" that controls this.
+  The functions buildSequences() and glob() have that option as well.
 - sequence: SeqString has a new method fnmatch() to do file name matching
   that may have wildcards as well as number substitution patterns (# or @).
 - sequence: SeqString comparison doesn't convert its argument into fresh
