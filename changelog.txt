@@ -45,8 +45,6 @@ Bug fixes/enhancements:
   has a number replaced by a string containing a number will treat this part
   as a string, not a number. This change considerably increases performance when
   sorting large string lists. 
-- sequence: Comparison of SeqStrings didn't work properly when the string parts
-  did already differ (in that case, numbers were completely ignored)
 - sequence: buildSequences() didn't work properly when assumeFiles was set to
   True and there was more than one number inside the path. Thanks to Scott Ballard.
 - viewer: Joystick support was partially broken (copy&paste error). Thanks

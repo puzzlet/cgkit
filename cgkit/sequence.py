@@ -140,7 +140,14 @@ class SeqString:
                 return 1
             else:
                 return 0
-        
+
+        # Check the 'structure' of the strings first.
+        # The numeric comparison is only done when the strings have the same
+        # text/num patterns.
+        res = self.match_cmp(other)
+        if res!=0:
+            return res
+
         # Compare the individual components of the values side by side
         for i, (a,b) in enumerate(zip(self._value, other._value)):
             if i%2==1:
@@ -477,6 +484,7 @@ class SeqString:
 
         # Replace the text
         self._value[idx2] = str(txt)
+
 
 class Sequence:
     """A list of names/objects that all belong to the same sequence.

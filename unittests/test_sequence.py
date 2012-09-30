@@ -46,10 +46,18 @@ class TestSeqString(unittest.TestCase):
 
         s1 = SeqString("P1_z")
         s2 = SeqString("P2_a")
-        self.assertEqual(True, s1<s2)
+        self.assertEqual(False, s1<s2)
 
         s1 = SeqString("P1_z76a")
         s2 = SeqString("P2_a")
+        self.assertEqual(False, s1<s2)
+
+        s1 = SeqString("IMG_0001.CR2")
+        s2 = SeqString("IMG_0001.JPG")
+        self.assertEqual(True, s1<s2)
+
+        s1 = SeqString("IMG_0002.CR2")
+        s2 = SeqString("IMG_0001.JPG")
         self.assertEqual(True, s1<s2)
     
     def testMatch(self):
