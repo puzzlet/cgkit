@@ -79,7 +79,7 @@ def _arrayPointer(a, n):
             raise TypeError("Unsupported array type (unsupported data value)")
         if data[1]==True:
             raise TypeError("Array is read-only")
-        if type(data[0]) is not int:
+        if type(data[0]) not in [int, long]:
             raise TypeError("Unsupported array type (data pointer is not an int)")
         return data[0]
     # Unknown array

@@ -18,6 +18,7 @@ New features:
 
 Bug fixes/enhancements:
 
+- pointcloud: readDataPoints() didn't work in Python 2.x on 64bit systems.
 - Shaders: Some of the RenderMan shaders were using variable names that are
   now reserved keywords. Those variables have been renamed.
 - mayaascii: Added support for the "relationship" MEL command that can appear
