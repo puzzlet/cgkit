@@ -707,6 +707,17 @@ class TestOutputNameGenerator(unittest.TestCase):
                           ("spam2_5.tif", "foo0004.tif"),
                           ("spam2_6.tif", "foo0005.tif")], list(ong))
 
+        # Check a sequence that has negative numbers
+        seqs = buildSequences(["spam-1.tif", "spam1.tif"], signedNums=True)
+        ong = OutputNameGenerator(seqs, "foo")
+        self.assertEqual([("spam-1.tif", "foo-001.tif"),
+                          ("spam1.tif", "foo0001.tif")], list(ong))
+
+        seqs = buildSequences(["spam-4_-1.tif", "spam-4_1.tif"], signedNums=True)
+        ong = OutputNameGenerator(seqs, "foo@@@_#")
+        self.assertEqual([("spam-4_-1.tif", "foo-04_-001.tif"),
+                          ("spam-4_1.tif", "foo-04_0001.tif")], list(ong))
+
         # Check an input "sequence" that just consists of a single file (that has a number)
         seqs = buildSequences(["spam2.tif"])
         ong = OutputNameGenerator(seqs, "foo")

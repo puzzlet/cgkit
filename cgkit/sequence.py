@@ -1604,7 +1604,8 @@ class OutputNameGenerator:
         
         # Add full range to the srcRanges list until the length is identical to
         # the number of sequences.
-        srcRanges.extend((len(srcSequences)-len(srcRanges))*[Range("0-")])
+        fullRange = self._getFullRange(srcSequences)
+        srcRanges.extend((len(srcSequences)-len(srcRanges))*[fullRange])
 
         if dstRange is None:
             dstRangeIter = None
@@ -1625,11 +1626,31 @@ class OutputNameGenerator:
         self._enforceDstRange = enforceDstRange
         self._repeatSrc = repeatSrc
         self.numberMergeFlag = False
-
+        
         # Run the output preparation just to set the numberMergeFlag.
         # The preparation is later done again when the user iterates over the names
         for srcSeq in self._srcSequences:
             self._outputNameSpec(srcSeq, dstName, dstRangeIter is not None)
+
+    def _getFullRange(self, srcSequences):
+        """Return a Range object that spans all numbers that appear in the sequences.
+        
+        Returns a Range object that can be used as default source range.
+        The range includes all numbers that appear anywhere on the input sequences.
+        srcSequences must be a list of Sequence objects.
+        """
+        # By default, the range starts at 0, but if any sequence contains
+        # negative numbers, we have to find the smallest negative number
+        # so that we can start from there.
+        minNumber = 0
+        for srcSeq in srcSequences:
+            for rng in srcSeq.ranges():
+                if len(rng)>0:
+                    start = iter(rng).next()
+                    if start<minNumber:
+                        minNumber = start
+        
+        return Range("%s-"%minNumber)
 
     def __iter__(self):
         return self.iterNames()
@@ -1717,15 +1738,22 @@ class OutputNameGenerator:
                     else:
                         break
             
+            # Build the signedNums argument. If the original SeqString contains
+            # negative numbers, then we keep that index so that the same negative
+            # number will be produced again below. Indices are counted from the
+            # end because we may cut away some numbers by removing the path.
+            if srcIter is not None:
+                signedNums = [-i-1 for i,x in enumerate(reversed(srcName.getNums())) if x<0]
+            
             srcName = str(srcName)
             baseName = os.path.basename(srcName)
             baseName,ext = os.path.splitext(baseName)
-            baseName = SeqString(baseName)
+            baseName = SeqString(baseName, signedNums=signedNums)
             # Get all the numbers that are present in the source name
             allNums = baseName.getNums()
             # Only keep the numbers that are actually used in the output name
             nums = list(map(lambda i: allNums[i], numIdxs))
-    
+
             # Only queue this file when it is part of the source range
             if len(nums)==0 or (nums[seqNumIdx] in srcRange):
                 # If a destination range was specified then replace the
