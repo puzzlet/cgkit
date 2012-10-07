@@ -2462,7 +2462,10 @@ def glob(name, signedNums=None):
     Returns a list of :class:`Sequence<cgkit.sequence.Sequence>` objects.
     The sequences and the files within the sequences are sorted.
     """
+    hasSep = name.endswith(os.path.sep)
     name = os.path.normpath(name)
+    if hasSep:
+        name += os.path.sep
     globpattern = name
     if not globpattern.endswith("*"):
         globpattern += "*"

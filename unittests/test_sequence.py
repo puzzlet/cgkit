@@ -603,6 +603,12 @@ class TestGlob(unittest.TestCase):
             f = open("tmp/globtsts_%04d.txt"%i, "wt")
             f.close()
 
+        if not os.path.isdir("tmp/seq"):
+            os.mkdir("tmp/seq")
+        for i in [1,2]:
+            f = open("tmp/seq/globtsts_%04d.txt"%i, "wt")
+            f.close()
+
         # Read an unsigned sequence        
         files = sequence.glob("tmp/glob*u_")
         self.assertEquals(1, len(files))
@@ -631,6 +637,11 @@ class TestGlob(unittest.TestCase):
         # Read a sequence that only consists of two digits (should return an empty list)
         files = sequence.glob("tmp/globtsts_@@.txt")
         self.assertEquals(0, len(files))
+
+        # Read sequences from a directory by specifying only the path
+        files = sequence.glob("tmp/seq/")
+        self.assertEquals(1, len(files))
+        self.assertEquals(['tmp/seq/globtsts_0001.txt', 'tmp/seq/globtsts_0002.txt'], list(files[0]))
 
 
 class TestSeqTemplate(unittest.TestCase):
