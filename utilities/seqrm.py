@@ -58,6 +58,8 @@ def promptUser(question):
 
 def main():
     parser = optparse.OptionParser(usage="%prog [options] sequences")
+    parser.add_option("-n", "--signed-frames", action="store_true", default=False, help="Treat the last number as a signed number")
+    parser.add_option("-N", "--signed-nums", action="store_true", default=False, help="Treat all numbers as signed numbers")
     parser.add_option("-f", "--force", action="store_true", default=False, help="Never query the user for confirmation")
     parser.add_option("-v", "--verbose", action="store_true", default=False, help="Print every file when it is deleted")
     parser.add_option("-V", "--version", action="store_true", default=False, help="Display version information")
@@ -70,11 +72,19 @@ def main():
     if len(args)<1:
         parser.print_usage()
         return
+
+    # Initialize the signedNums parameter
+    if opts.signed_nums:
+        signedNums = True
+    elif opts.signed_frames:
+        signedNums = [-1]
+    else:
+        signedNums = None
  
     # Collect all specified sequences...
     sequences = []
     for pattern in args:
-        fseqs = sequence.glob(pattern)
+        fseqs = sequence.glob(pattern, signedNums=signedNums)
         if len(fseqs)==0:
             print >>sys.stderr, '%s: No sequence "%s" found.'%(os.path.basename(sys.argv[0]), pattern)
             

@@ -60,11 +60,13 @@ def main():
     """Main function.
     """
     parser = optparse.OptionParser(usage="%prog [options] src dst")
-    parser.add_option("-s", "--source-frames", default="0-", metavar="FRAMES", help="Specify a subset of the source frames")
+    parser.add_option("-s", "--source-frames", default=None, metavar="FRAMES", help="Specify a subset of the source frames")
     parser.add_option("-d", "--destination-frames", default=None, metavar="FRAMES", help="Specify the destination numbers")
     parser.add_option("-e", "--drop-extensions", action="store_true", default=False, help="Don't handle missing file extensions in the output pattern")
     parser.add_option("-S", "--symlink", action="store_true", default=False, help="Create symbolic links instead of copying the files")
     parser.add_option("-R", "--realpath", action="store_true", default=False, help="Use the real path of the source files (follow links). This is only relevant when symbolic links are created.")
+    parser.add_option("-n", "--signed-frames", action="store_true", default=False, help="Treat the last number as a signed number")
+    parser.add_option("-N", "--signed-nums", action="store_true", default=False, help="Treat all numbers as signed numbers")
     parser.add_option("-f", "--force", action="store_true", default=False, help="Never query the user for confirmation")
     parser.add_option("-t", "--test", action="store_true", default=False, help="Only print what would be done, but don't copy anything")
     parser.add_option("-v", "--verbose", action="store_true", default=False, help="Print every file when it is copied")
@@ -80,25 +82,36 @@ def main():
         return
 
     # The source frame numbers
-    srcRange = sequence.Range(opts.source_frames)
+    if opts.source_frames is not None:
+        srcRanges = [sequence.Range(opts.source_frames)]
+    else:
+        srcRanges = None
     
     # The destination frame numbers
     dstRange = None
     if opts.destination_frames is not None:
         dstRange = sequence.Range(opts.destination_frames)
 
+    # Initialize the signedNums parameter
+    if opts.signed_nums:
+        signedNums = True
+    elif opts.signed_frames:
+        signedNums = [-1]
+    else:
+        signedNums = None
+
     srcSeq = args[0]
     dstArg = args[1]
     
     # Determine the source sequences
-    fseqs = sequence.glob(srcSeq)
+    fseqs = sequence.glob(srcSeq, signedNums=signedNums)
     
     if opts.symlink:
-        processor = sequence.SymLinkSequence(fseqs, dstArg, [srcRange], dstRange,
+        processor = sequence.SymLinkSequence(fseqs, dstArg, srcRanges, dstRange,
                                              keepExt=not opts.drop_extensions, verbose=opts.verbose, resolveSrcLinks=opts.realpath)
         opStr = "Link"
     else:
-        processor = sequence.CopySequence(fseqs, dstArg, [srcRange], dstRange,
+        processor = sequence.CopySequence(fseqs, dstArg, srcRanges, dstRange,
                                           keepExt=not opts.drop_extensions, verbose=opts.verbose, resolveSrcLinks=opts.realpath)
         opStr = "Copy"
     

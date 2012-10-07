@@ -46,6 +46,14 @@ list the contents of a directory. Example::
 ``-d`` / ``--directories``
    Include directories in the list.
 
+``-n``/ ``--signed-frames``
+
+   Treat the last number in a file as a signed number (assuming this is the frame number).
+
+``-N``/ ``--signed-nums``
+
+   Treat all numbers in the file names as signed numbers.
+
 ``-V`` / ``--version``
    Display version information and quit.
 
@@ -98,6 +106,14 @@ confirmation query.
    of the output sequence must then be part of the destination name pattern.
    You have to use this option if you want the files in the output sequence
    to have a different extension than the files in the source sequence.
+
+``-n``/ ``--signed-frames``
+
+   Treat the last number in a source file as a signed number (assuming this is the frame number).
+
+``-N``/ ``--signed-nums``
+
+   Treat all numbers in the source file names as signed numbers.
    
 ``-f`` / ``--force``
    Never query the user for confirmation.
@@ -167,7 +183,15 @@ confirmation query.
    When the source files are symbolic links, this option instructs the utility
    to replace the source file names by their real path (i.e. follow links).
    This is only really relevant when the option ``-S/--symlink`` is used.
-   
+
+``-n``/ ``--signed-frames``
+
+   Treat the last number in a source file as a signed number (assuming this is the frame number).
+
+``-N``/ ``--signed-nums``
+
+   Treat all numbers in the source file names as signed numbers.
+
 ``-f`` / ``--force``
    Never query the user for confirmation.
     
@@ -202,6 +226,14 @@ confirmation query.
 
 ``-h`` / ``--help``
    Show the help message.
+
+``-n``/ ``--signed-frames``
+
+   Treat the last number in a file as a signed number (assuming this is the frame number).
+
+``-N``/ ``--signed-nums``
+
+   Treat all numbers in the file names as signed numbers.
    
 ``-f`` / ``--force``
    Never query the user for confirmation.

@@ -854,6 +854,18 @@ class TestSeqUtils(unittest.TestCase):
         self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("2-4"), Range("1,2,5"))
         self.assertFiles("tmp/spam#.txt", "spam#.txt", Range("1,2,5"))
 
+    def testSeqCp5(self):
+        """Test seqcp with a sequence containing negative frames and the -n option."""
+        self.createSequence("tmp/spam#.txt", Range("-2-3"))
+        os.system("python ../utilities/seqcp.py -n tmp/spam tmp/foo")
+        self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("-2-3"))
+
+    def testSeqCp6(self):
+        """Test seqcp with a sequence containing negative frames and the -N option."""
+        self.createSequence("tmp/spam#.txt", Range("-2-3"))
+        os.system("python ../utilities/seqcp.py -N tmp/spam tmp/foo")
+        self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("-2-3"))
+
 
     def testSeqMv1(self):
         """Test basic seqmv"""
@@ -906,6 +918,18 @@ class TestSeqUtils(unittest.TestCase):
         self.createSequence("tmp/spam#.ext", Range("1-3"))
         os.system('python ../utilities/seqmv.py "tmp/spam*.ext" tmp/foo@@.txt -e')
         self.assertFiles("tmp/foo@@.txt", "spam#.ext", Range("1-3"))
+
+    def testSeqMv9(self):
+        """Test the -n option to process negative frames."""
+        self.createSequence("tmp/spam#.txt", Range("-2-3"))
+        os.system('python ../utilities/seqmv.py -n tmp/spam tmp/foo')
+        self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("-2-3"))
+
+    def testSeqMv10(self):
+        """Test the -N option to process negative frames."""
+        self.createSequence("tmp/spam#.txt", Range("-2-3"))
+        os.system('python ../utilities/seqmv.py -N tmp/spam tmp/foo')
+        self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("-2-3"))
         
         
     def assertFiles(self, namePattern, origPattern, rng, origRng=None):

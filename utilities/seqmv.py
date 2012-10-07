@@ -59,9 +59,11 @@ def main():
     """Main function.
     """
     parser = optparse.OptionParser(usage="%prog [options] src dst")
-    parser.add_option("-s", "--source-frames", default="0-", metavar="FRAMES", help="Specify a subset of the source frames")
+    parser.add_option("-s", "--source-frames", default=None, metavar="FRAMES", help="Specify a subset of the source frames")
     parser.add_option("-d", "--destination-frames", default=None, metavar="FRAMES", help="Specify the destination numbers")
     parser.add_option("-e", "--drop-extensions", action="store_true", default=False, help="Don't handle missing file extensions in the output pattern")
+    parser.add_option("-n", "--signed-frames", action="store_true", default=False, help="Treat the last number as a signed number")
+    parser.add_option("-N", "--signed-nums", action="store_true", default=False, help="Treat all numbers as signed numbers")
     parser.add_option("-f", "--force", action="store_true", default=False, help="Never query the user for confirmation")
     parser.add_option("-t", "--test", action="store_true", default=False, help="Only print what would be done, but don't move anything")
     parser.add_option("-v", "--verbose", action="store_true", default=False, help="Print every file when it is moved")
@@ -77,20 +79,31 @@ def main():
         return
 
     # The source frame numbers
-    srcRange = sequence.Range(opts.source_frames)
+    if opts.source_frames is not None:
+        srcRanges = [sequence.Range(opts.source_frames)]
+    else:
+        srcRanges = None
     
     # The destination frame numbers
     dstRange = None
     if opts.destination_frames is not None:
         dstRange = sequence.Range(opts.destination_frames)
 
+    # Initialize the signedNums parameter
+    if opts.signed_nums:
+        signedNums = True
+    elif opts.signed_frames:
+        signedNums = [-1]
+    else:
+        signedNums = None
+
     srcSeq = args[0]
     dstArg = args[1]
     
     # Determine the source sequences
-    fseqs = sequence.glob(srcSeq)
+    fseqs = sequence.glob(srcSeq, signedNums=signedNums)
     
-    mover = sequence.MoveSequence(fseqs, dstArg, [srcRange], dstRange, keepExt=not opts.drop_extensions, verbose=opts.verbose)
+    mover = sequence.MoveSequence(fseqs, dstArg, srcRanges, dstRange, keepExt=not opts.drop_extensions, verbose=opts.verbose)
     
     for srcSeq,dstSeq in mover.sequences():
         print ("Move: %s -> %s"%(srcSeq, dstSeq))

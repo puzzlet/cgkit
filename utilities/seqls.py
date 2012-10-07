@@ -131,6 +131,8 @@ def main():
     parser = optparse.OptionParser(usage="%prog [options] paths")
     parser.add_option("-l", "--long", action="store_true", default=False, help="Print additional information per sequence")
     parser.add_option("-d", "--directories", action="store_true", default=False, help="List directories")
+    parser.add_option("-n", "--signed-frames", action="store_true", default=False, help="Treat the last number as a signed number")
+    parser.add_option("-N", "--signed-nums", action="store_true", default=False, help="Treat all numbers as signed numbers")
     parser.add_option("-V", "--version", action="store_true", default=False, help="Display version information")
     opts,args = parser.parse_args()
 
@@ -142,6 +144,14 @@ def main():
         args = ["*"]
 
     args.sort()
+
+    # Initialize the signedNums parameter
+    if opts.signed_nums:
+        signedNums = True
+    elif opts.signed_frames:
+        signedNums = [-1]
+    else:
+        signedNums = None
 
     # List directories first
     if opts.directories:
@@ -155,7 +165,7 @@ def main():
     
     # List sequences
     for pattern in args: 
-        fseqs = sequence.glob(pattern)
+        fseqs = sequence.glob(pattern, signedNums=signedNums)
         for fseq in fseqs:
             if opts.long:
                 info = SequenceInfo(fseq)

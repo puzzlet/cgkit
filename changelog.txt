@@ -55,6 +55,8 @@ Bug fixes/enhancements:
   sorting large string lists. 
 - sequence: buildSequences() didn't work properly when assumeFiles was set to
   True and there was more than one number inside the path. Thanks to Scott Ballard.
+- The file sequence utilities now support negsative numbers in file names
+  (via the options -n or -N).
 - viewer: Joystick support was partially broken (copy&paste error). Thanks
   to Mariano Sospiro for providing a patch.
 - mat3/mat4: The decompose() method doesn't raise a ZeroDivisionError anymore
