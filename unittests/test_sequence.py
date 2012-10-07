@@ -689,6 +689,37 @@ class TestOutputNameGenerator(unittest.TestCase):
                           ("spam2_5.tif", "foo0004.tif"),
                           ("spam2_6.tif", "foo0005.tif")], list(ong))
 
+        # Check an input "sequence" that just consists of a single file (that has a number)
+        seqs = buildSequences(["spam2.tif"])
+        ong = OutputNameGenerator(seqs, "foo")
+        self.assertEqual([("spam2.tif", "foo0002.tif")], list(ong))
+
+        seqs = buildSequences(["spam2.tif"])
+        ong = OutputNameGenerator(seqs, "foo#")
+        self.assertEqual([("spam2.tif", "foo0002.tif")], list(ong))
+
+        seqs = buildSequences(["spam4_2.tif"])
+        ong = OutputNameGenerator(seqs, "foo")
+        self.assertEqual([("spam4_2.tif", "foo0002.tif")], list(ong))
+
+        seqs = buildSequences(["spam4_2.tif"])
+        ong = OutputNameGenerator(seqs, "foo#")
+        self.assertEqual([("spam4_2.tif", "foo0002.tif")], list(ong))
+
+        seqs = buildSequences(["spam4_2.tif"])
+        ong = OutputNameGenerator(seqs, "foo@_#")
+        self.assertEqual([("spam4_2.tif", "foo4_0002.tif")], list(ong))
+
+        # Check an input "sequence" that just consists of a single file (that has two numbers)
+        seqs = buildSequences(["spam3_7.tif"])
+        ong = OutputNameGenerator(seqs, "foo")
+        self.assertEqual([("spam3_7.tif", "foo0007.tif")], list(ong))
+
+        # Check an input "sequence" that just consists of a single file (that has no number)
+        seqs = buildSequences(["spam.tif"])
+        ong = OutputNameGenerator(seqs, "foo")
+        self.assertEqual([("spam.tif", "foo.tif")], list(ong))
+
     def testSrcRanges(self):
         """Test the srcRanges argument.
         """

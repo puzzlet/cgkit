@@ -1694,7 +1694,7 @@ class OutputNameGenerator:
         # range would have no effect and the output would be "foo1", "foo1",
         # "foo2", "foo2". The following if sets the main sequence number to be
         # the first one and then everything is fine again.
-        if seqNumIdx not in ei:
+        if len(ei)!=0 and seqNumIdx not in ei:
             seqNumIdx = max(ei)
         
         srcIter = iter(srcSequence)
@@ -1777,6 +1777,12 @@ class OutputNameGenerator:
     
         numValues = len(ranges)
         numVaryingValues = len(list(filter(lambda rng: len(rng)>1, ranges)))
+        # If the sequence only consisted of one single file (containing a number),
+        # then we still assume there is a varying value (which will be the last
+        # number. seqNumIdx is the index of the last number at this point).
+        # This way the input file can still be treated as a proper sequence. 
+        if len(fileSequence)==1 and len(ranges)>0:
+            numVaryingValues = 1
         
         numIdxs = list(range(numValues))
         
@@ -1804,10 +1810,14 @@ class OutputNameGenerator:
         # Then we can assume that the user only wants to reference the varying
         # numbers and the constant numbers are just part of the name.
         elif numPatterns==numVaryingValues and not dstTemplate.hasExplicitIndex:
-            numIdxs = []
-            for i,rng in enumerate(ranges):
-                if len(rng)>1:
-                    numIdxs.append(i)
+            if len(fileSequence)>1:
+                numIdxs = []
+                for i,rng in enumerate(ranges):
+                    if len(rng)>1:
+                        numIdxs.append(i)
+            else:
+                # This is used for sequences that only have one single file. We treat the last number as the varying number.
+                numIdxs = [seqNumIdx]
         # Do we have too few patterns? (and the user did not specify any
         # index explicitly?)
         # If so, throw an error because it's not clear which number should be

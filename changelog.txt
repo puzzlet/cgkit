@@ -40,6 +40,8 @@ Bug fixes/enhancements:
 - GLRenderer: OpenGL errors could leak through into Python and produce exceptions
   on unrelated PyOpenGL calls. The error flag is now cleared at the end of
   the C++ rendering code (bug #2974422).
+- sequence: Bugfix: Sequences with only one single file didn't get handled properly
+  resulting in useless error messages when the sequence utilities were used.
 - sequence: SeqString can now optionally handle negative numbers as well.
   The constructor takes a new argument "signedNums" that controls this.
   The functions buildSequences() and glob() have that option as well.
