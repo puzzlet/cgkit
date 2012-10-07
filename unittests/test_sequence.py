@@ -403,6 +403,24 @@ class TestRange(unittest.TestCase):
         self.assertEqual(3, len(r))
         self.assertEqual([1,2,3], list(r))
         
+        r = Range("-2")
+        self.assertEqual(1, len(r))
+        self.assertEqual([-2], list(r))
+        self.assertEqual("-2", str(r))
+        self.assertEqual(False, r.isInfinite())
+
+        r = Range("-2-2x2")
+        self.assertEqual(3, len(r))
+        self.assertEqual([-2,0,2], list(r))
+        self.assertEqual("-2-2x2", str(r))
+        self.assertEqual(False, r.isInfinite())
+
+        r = Range("-3--1")
+        self.assertEqual(3, len(r))
+        self.assertEqual([-3,-2,-1], list(r))
+        self.assertEqual("-3--1", str(r))
+        self.assertEqual(False, r.isInfinite())
+
         self.assertRaises(ValueError, lambda: r.setRange("spam"))
         
     def testNormalization(self):

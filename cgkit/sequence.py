@@ -1066,7 +1066,7 @@ class Range:
         if type(rangeStr) is not str:
             raise TypeError("The rangeStr argument must be a string")
 
-        reRange = re.compile(r"([0-9]+)(?:-([0-9]*)(?:x([0-9]+))?)?$")
+        reRange = re.compile(r"(-?[0-9]+)(?:-(-?[0-9]*)(?:x([0-9]+))?)?$")
 
         ranges = []
         for rs in rangeStr.split(","):
