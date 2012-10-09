@@ -222,6 +222,9 @@ RI_HANDLEID     = "__handleid"
 # Tokens specific to the cgkit binding...
 RI_RIBOUTPUT    = "_riboutput"
 RI_VERSION      = "_version"
+RI_ROUND_NDIGITS = "roundndigits"
+RI_NUM_SIGNIFICANT_DIGITS = "numsignificantdigits"
+RI_FLOAT_FMT_STRING = "floatfmtstring"
 
 # Error handling: severity levels
 RIE_INFO        = 0
@@ -503,6 +506,8 @@ def RiOption(name, *paramlist, **keyparams):
     Example: RiOption("searchpath", "shader","~/shaders:&")
     """
     global _ribout
+    global _round_ndigits
+    global _float_conversion_string
 
     # cgkit specific options?
     if name==RI_RIBOUTPUT:
@@ -511,6 +516,12 @@ def RiOption(name, *paramlist, **keyparams):
             # Disable the "version" call in the RIB stream...
             if hasattr(_ribout, "output_version"):
                 _ribout.output_version = 0
+        
+        _round_ndigits = keyparams.get(RI_ROUND_NDIGITS, _round_ndigits)
+        numDigits = keyparams.get(RI_NUM_SIGNIFICANT_DIGITS, None)
+        if numDigits is not None:
+            _float_conversion_string = "%%1.%dg"%int(numDigits)
+        _float_conversion_string = keyparams.get(RI_FLOAT_FMT_STRING, _float_conversion_string)
         return
             
     _ribout.write('Option "'+name+'"'+_paramlist2string(paramlist, keyparams)+"\n")
@@ -2073,6 +2084,14 @@ def RiResourceEnd():
 _contexts     = {}
 _current_context = None
 
+# The number of digits that floats are rounded to (may be negative).
+# This is the second argument to round(). The parameter is global and not
+# part of a Ri context.
+_round_ndigits = 10
+# The conversion format string for floats. Floats are first rounded and
+# then converted using this string.
+_float_conversion_string = "%1.6g"
+
 ####
 
 # Initially the output stream is stdout (and not an instance of RIBStream)
@@ -2232,16 +2251,26 @@ def _flatten(seq):
     Example: _flatten( [(1,2,3), (4,5,6)] ) -> ["1","2","3","4","5","6"]
              _flatten( ("str1","str2") )    -> ['"str1"','"str2"']
     """
+    global _round_ndigits
+    global _float_conversion_string
+    
+    ndigits = _round_ndigits
+    floatFmtStr = _float_conversion_string
+    
     res = []
-    ScalarTypes = [types.IntType, types.LongType, types.FloatType]
+    ScalarTypes = [types.IntType, types.LongType]
     for v in seq:
         vtype = type(v)
         # v=scalar?
-        if vtype in ScalarTypes:
+        if vtype is float:
+            res.append(floatFmtStr%round(v,ndigits))
+        elif vtype in ScalarTypes:
             res.append(str(v))
         # vec3?
         elif isinstance(v, _vec3):
-            res.extend([str(v.x), str(v.y), str(v.z)])
+            res.extend([floatFmtStr%round(v.x,ndigits),
+                        floatFmtStr%round(v.y,ndigits),
+                        floatFmtStr%round(v.z,ndigits)])
         # v=string?
         elif isinstance(v, basestring):
             res.append('"%s"'%v)
@@ -2324,10 +2353,10 @@ def _merge_paramlist(paramlist, keyparams):
     # Check if the number of values is uneven (this is only allowed when
     # the last value is None (RI_NULL) in which case this last value is ignored)
     if (len(res)%2==1):
-       if res[-1] is None:
-           res = res[:-1]
-       else:
-           raise ValueError("The parameter list must contain an even number of values")
+        if res[-1] is None:
+            res = res[:-1]
+        else:
+            raise ValueError("The parameter list must contain an even number of values")
 
     # Append the params from the keyparams dict to the parameter list
     map(lambda param: res.extend(param), keyparams.items())
@@ -2348,6 +2377,8 @@ def _paramlist2string(paramlist, keyparams={}):
     """
 
     global _declarations
+    global _round_ndigits
+    global _float_conversion_string
 
     paramlist = _merge_paramlist(paramlist, keyparams)
 
@@ -2378,8 +2409,11 @@ def _paramlist2string(paramlist, keyparams={}):
         elif isseq:
             value = _seq2list(value)
         else:
-            value='[%s]'%value
-        res+=' "'+token+'" '+value
+            if type(value) is float:
+                value = '[%s]'%(_float_conversion_string%round(value, _round_ndigits))
+            else:
+                value='[%s]'%value
+        res+=' "%s" %s'%(token, value)
 
     if (res==" "): res=""
     return res

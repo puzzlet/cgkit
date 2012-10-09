@@ -304,6 +304,30 @@ stream:
    --- New in version 1.1
    (as of cgkit 2.0.0alpha9, the ``version`` call has been disabled)
 
+.. function:: RiOption(RI_RIBOUTPUT, RI_NUM_SIGNIFICANT_DIGITS, 6)
+
+   This option can be used to set the number of significant digits that should
+   be used for writing floating point values in parameter lists (default is 6).
+   The value can be changed any time to affect subsequent calls.
+   --- New in version 2.0
+
+.. function:: RiOption(RI_RIBOUTPUT, RI_ROUND_NDIGITS, 10)
+
+   Before a floating point value in a parameter list is written into the RIB,
+   it is rounded to a certain precision. The precision can be controlled using
+   this option (default is 10).
+   The value can be changed any time to affect subsequent calls.
+   --- New in version 2.0
+
+.. function:: RiOption(RI_RIBOUTPUT, RI_FLOAT_FMT_STRING, "%1.6g")
+
+   This can be used to specify a custom formatting string that should be used
+   for writing floating point values stored in parameter lists (default is ``"%1.6g"``).
+   If this option is used, the RI_NUM_SIGNIFICANT_DIGITS setting does not have
+   an effect anymore.
+   The value can be changed any time to affect subsequent calls.
+   --- New in version 2.0
+
 .. % -----------
 
 

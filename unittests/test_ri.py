@@ -36,6 +36,34 @@ class TestRi(unittest.TestCase):
         
         self.assertFiles("tmp/riout_norm.rib", "data/riout_ref.rib")
         self.assertFiles("tmp/include_norm.rib", "data/include_ref.rib")
+    
+    def testFloatOutput(self):
+        """Test the RIB output options that manipulate how floats in paramlists get written.
+        """
+        cgkit.ri.RiBegin("tmp/floatout.rib")
+        
+        cgkit.ri.RiPatch(cgkit.ri.RI_BILINEAR, P=[(-1.1234567837831, 0.998637831788, 0.000378137687), (1.1,1,0), (1,-1,0), (-1,-1,0)])
+        
+        cgkit.ri.RiOption(cgkit.ri.RI_RIBOUTPUT, cgkit.ri.RI_NUM_SIGNIFICANT_DIGITS, 3)
+        cgkit.ri.RiPatch(cgkit.ri.RI_BILINEAR, P=[(-1.1234567837831, 0.998637831788, 0.000378137687), (1.1,1,0), (1,-1,0), (-1,-1,0)])
+        
+        cgkit.ri.RiOption(cgkit.ri.RI_RIBOUTPUT, cgkit.ri.RI_ROUND_NDIGITS, 2)
+        cgkit.ri.RiPatch(cgkit.ri.RI_BILINEAR, P=[(-1.1234567837831, 0.998637831788, 0.000378137687), (1.1,1,0), (1,-1,0), (-1,-1,0)])
+        
+        cgkit.ri.RiOption(cgkit.ri.RI_RIBOUTPUT, cgkit.ri.RI_FLOAT_FMT_STRING, "%1.3f")
+        cgkit.ri.RiPatch(cgkit.ri.RI_BILINEAR, P=[(-1.1234567837831, 0.998637831788, 0.000378137687), (1.1,1,0), (1,-1,0), (-1,-1,0)])
+        
+        cgkit.ri.RiEnd()
+
+        # Load the RIB again and check it's ok        
+        f = open("tmp/floatout.rib", "rt")
+        rib = f.read()
+        f.close()
+        self.assertEqual("""Patch "bilinear" "P" [-1.12346 0.998638 0.000378138 1.1 1 0 1 -1 0 -1 -1 0]
+Patch "bilinear" "P" [-1.12 0.999 0.000378 1.1 1 0 1 -1 0 -1 -1 0]
+Patch "bilinear" "P" [-1.12 1 0 1.1 1 0 1 -1 0 -1 -1 0]
+Patch "bilinear" "P" [-1.120 1.000 0.000 1.100 1 0 1 -1 0 -1 -1 0]
+""", rib)
         
     def testCRiModule(self):
         """Check the cri module."""

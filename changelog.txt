@@ -18,6 +18,9 @@ New features:
 
 Bug fixes/enhancements:
 
+- ri: There are new implementation-specific options to control how floating
+  point values in parameter lists are written into the RIB stream (using
+  fewer digits as before which can reduce file sizes considerably). 
 - pointcloud: readDataPoints() didn't work in Python 2.x on 64bit systems.
 - Shaders: Some of the RenderMan shaders were using variable names that are
   now reserved keywords. Those variables have been renamed.
