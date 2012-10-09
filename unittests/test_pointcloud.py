@@ -18,7 +18,11 @@ class TestPointCloud(unittest.TestCase):
     
     def __init__(self, *args, **kwargs):
         unittest.TestCase.__init__(self, *args, **kwargs)
-        self.libName = "3delight"
+        self.libName = os.getenv("CGKIT_POINTCLOUD_LIB")
+        if self.libName is None:
+            print ("pointcloud test is disabled. Set CGKIT_POINTCLOUD_LIB to the renderer lib to enable the test.")
+#        self.libName = "aqsis_tex"
+#        self.libName = "3delight"
 #        self.libName = "prman"
         self.accuracy = 3
         
@@ -29,6 +33,9 @@ class TestPointCloud(unittest.TestCase):
     def testSinglePoints(self):
         """Test writing/reading individual points.
         """
+        if self.libName is None:
+            return
+        
         world2eye = mat4(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16)
         world2ndc = mat4(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,0.10,0.11,0.12,0.13,0.14,0.15,0.16)
         ptc = pointcloud.open("tmp/pointcloud.ptc", "w", self.libName, vars=[], world2eye=world2eye, world2ndc=world2ndc, format=(640,480,1))
@@ -121,6 +128,9 @@ class TestPointCloud(unittest.TestCase):
     def testMultiPoints(self):
         """Test writing/reading several points at once.
         """
+        if self.libName is None:
+            return
+        
         pnts = (6*ctypes.c_float)(0.4, 0.8, 1.0,  0.9, 0.7, 0.6)
         norms = (6*ctypes.c_float)(1,0,0,  0,0,1)
         rads = (2*ctypes.c_float)(0.4, 0.5)
@@ -196,6 +206,8 @@ class TestPointCloud(unittest.TestCase):
     def testMultiPointsOneBuffer(self):
         """Test writing/reading several points at once.
         """
+        if self.libName is None:
+            return
         if not numpy_available:
             return
         
