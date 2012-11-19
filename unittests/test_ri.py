@@ -78,7 +78,7 @@ Patch "bilinear" "P" [-1.120 1.000 0.000 1.100 1 0 1 -1 0 -1 -1 0]
 #        ri = cgkit.cri.loadRI(None)
         ri = cgkit.cri.loadRI("3delight")
 #        ri = cgkit.cri.loadRI("ri")
-#        ri = cgkit.cri.loadRI("aqsislib")
+#        ri = cgkit.cri.loadRI("aqsis_core")
 #        ri = cgkit.cri.loadRI("ri2rib")
 #        ri = cgkit.cri.loadRI("prman")
 #        ri.RiProcFree = None

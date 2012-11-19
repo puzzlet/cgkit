@@ -4,7 +4,7 @@
 import glob, os.path, unittest
 
 # A list of module names that should be ignored
-ignore = []
+ignore = ["test_ffmpeg", "test_mediafile"]
 
 # Import all test_*.py files
 for test in glob.glob("test_*.py"):
