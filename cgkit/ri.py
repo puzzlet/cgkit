@@ -2331,7 +2331,7 @@ def _paramlist2lut(paramlist, keyparams):
     The resulting dictionary can be used to look up the value of tokens.
     """
     # Add the paramlist tuple to the keyword argument dict
-    for i in range(len(paramlist)/2):
+    for i in range(len(paramlist)//2):
         token = paramlist[i*2]
         value = paramlist[i*2+1]
         # Extract the name of the token (without inline declaration
