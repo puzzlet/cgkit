@@ -4,6 +4,7 @@ tmp
 www
 project_web
 supportlib/html
+unittests/tstqueue
 config.cfg
 dev*.sh
 dev*.bat
