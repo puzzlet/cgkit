@@ -67,9 +67,6 @@ As long as only the general purpose modules or the
 external dependency.  If cgkit is used to create and process a scene in memory
 then the following packages might get used:
 
-* `PyProtocols <http://peak.telecommunity.com/PyProtocols.html>`_: This is a
-  general requirement for scene management used in various places.
-
 * `PyOpenGL <http://pyopengl.sourceforge.net/>`_: This is only  required when
   doing OpenGL visualizations, and even then it is only necessary for some
   particular geometric objects (those that are implemented in Python). As long as
