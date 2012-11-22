@@ -30,27 +30,27 @@ be shared among them.
 
 .. method:: GeomObject.uniformCount()
 
-   Return the multiplicity of :keyword:`UNIFORM` variables.
+   Return the multiplicity of :data:`UNIFORM` variables.
 
 
 .. method:: GeomObject.varyingCount()
 
-   Return the multiplicity of :keyword:`VARYING` variables.
+   Return the multiplicity of :data:`VARYING` variables.
 
 
 .. method:: GeomObject.vertexCount()
 
-   Return the multiplicity of :keyword:`VERTEX` variables.
+   Return the multiplicity of :data:`VERTEX` variables.
 
 
 .. method:: GeomObject.faceVaryingCount()
 
-   Return the multiplicity of :keyword:`FACEVARYING` variables.
+   Return the multiplicity of :data:`FACEVARYING` variables.
 
 
 .. method:: GeomObject.faceVertexCount()
 
-   Return the multiplicity of :keyword:`FACEVERTEX` variables.
+   Return the multiplicity of :data:`FACEVERTEX` variables.
 
 
 .. method:: GeomObject.slotSizeConstraint(storage)
