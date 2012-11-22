@@ -31,6 +31,7 @@ Generic Modules
    stitch
    sequence
    jobqueue
-   ffmpeg
-   mediafile
+
+..  ffmpeg
+    mediafile
    
