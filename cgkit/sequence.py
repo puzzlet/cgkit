@@ -899,7 +899,7 @@ class Range:
       [1, 2, 3, 10, 11, 12, 13]
 
     The range object supports the :func:`len()` operator, comparison operators,
-    the :keyword:`in` operator and iteration. Examples:
+    the :obj:`in` operator and iteration. Examples:
     
       >>> rng = Range("1-2,5")
       >>> len(rng)
