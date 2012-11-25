@@ -612,36 +612,45 @@ class TestGlob(unittest.TestCase):
         # Read an unsigned sequence        
         files = sequence.glob("tmp/glob*u_")
         self.assertEquals(1, len(files))
-        self.assertEqual(['tmp/globtstu_1.txt', 'tmp/globtstu_2.txt', 'tmp/globtstu_10.txt'], list(files[0]))
+        self.assertEqual([os.path.join('tmp', 'globtstu_1.txt'),
+                          os.path.join('tmp', 'globtstu_2.txt'),
+                          os.path.join('tmp', 'globtstu_10.txt')], list(files[0]))
 
         # Read an unsigned sequence using a pattern containing "@". The result must also include frame 10.
         files = sequence.glob("tmp/globtstu_@.txt")
         self.assertEquals(1, len(files))
-        self.assertEqual(['tmp/globtstu_1.txt', 'tmp/globtstu_2.txt', 'tmp/globtstu_10.txt'], list(files[0]))
+        self.assertEqual([os.path.join('tmp', 'globtstu_1.txt'),
+                          os.path.join('tmp', 'globtstu_2.txt'),
+                          os.path.join('tmp', 'globtstu_10.txt')], list(files[0]))
 
         # Read an unsigned sequence using a pattern containing "@@". The result must only include frame 10.
         files = sequence.glob("tmp/globtstu_@@.txt")
         self.assertEquals(1, len(files))
-        self.assertEqual(['tmp/globtstu_10.txt'], list(files[0]))
+        self.assertEqual([os.path.join('tmp', 'globtstu_10.txt')], list(files[0]))
 
         # Read a signed sequence as unsigned (the negative numbers should now not appear because they don't match the pattern)
         files = sequence.glob("tmp/globtsts_#.txt")
         self.assertEquals(1, len(files))
-        self.assertEquals(['tmp/globtsts_0001.txt', 'tmp/globtsts_0002.txt'], list(files[0]))
+        self.assertEquals([os.path.join('tmp', 'globtsts_0001.txt'),
+                           os.path.join('tmp', 'globtsts_0002.txt')], list(files[0]))
 
         # Read a signed sequence
         files = sequence.glob("tmp/globtsts_#.txt", signedNums=True)
         self.assertEquals(1, len(files))
-        self.assertEquals(['tmp/globtsts_-002.txt', 'tmp/globtsts_-001.txt', 'tmp/globtsts_0001.txt', 'tmp/globtsts_0002.txt'], list(files[0]))
+        self.assertEquals([os.path.join('tmp', 'globtsts_-002.txt'),
+                           os.path.join('tmp', 'globtsts_-001.txt'),
+                           os.path.join('tmp', 'globtsts_0001.txt'),
+                           os.path.join('tmp', 'globtsts_0002.txt')], list(files[0]))
 
         # Read a sequence that only consists of two digits (should return an empty list)
         files = sequence.glob("tmp/globtsts_@@.txt")
         self.assertEquals(0, len(files))
 
         # Read sequences from a directory by specifying only the path
-        files = sequence.glob("tmp/seq/")
+        files = sequence.glob(os.path.join("tmp", "seq", ""))
         self.assertEquals(1, len(files))
-        self.assertEquals(['tmp/seq/globtsts_0001.txt', 'tmp/seq/globtsts_0002.txt'], list(files[0]))
+        self.assertEquals([os.path.join('tmp', 'seq', 'globtsts_0001.txt'),
+                           os.path.join('tmp', 'seq', 'globtsts_0002.txt')], list(files[0]))
 
 
 class TestSeqTemplate(unittest.TestCase):

@@ -1,6 +1,6 @@
 # Test the jobqueue module
 
-import unittest, os.path
+import unittest, os.path, stat
 import sys, shutil
 from cgkit.jobqueue import createJobQueue, JobQueue, JobQueueError
 from cgkit.jobqueue.jobhandle import JobHandle
@@ -77,6 +77,12 @@ class TestJobQueue(unittest.TestCase):
 
 # Remove the queue from a previous run
 if os.path.exists("tstqueue"):
+    # Change the permissions of the files inside the queue directory so that we can delete them...
+    for dirpath,dirnames,filenames in os.walk("tstqueue"):
+        for name in filenames:
+            fullname = os.path.join(dirpath, name)
+            os.chmod(fullname, stat.S_IWRITE)
+    # Delete the queue...
     shutil.rmtree("tstqueue")
 
 if __name__=="__main__":
