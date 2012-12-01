@@ -12,31 +12,31 @@ class TestQuat_light(unittest.TestCase):
 
     def testConstructor(self):
         q = quat(1.5,-2,3,2)
-        self.failUnless(q.w==1.5 and q.x==-2.0 and q.y==3 and q.z==2,
+        self.assertTrue(q.w==1.5 and q.x==-2.0 and q.y==3 and q.z==2,
                         "Konstruktor quat(w,x,y,z) falsch: %s"%str(q))
 
         q = quat()
-        self.failUnless(q==quat(0,0,0,0),"Konstruktor quat() falsch: %s"%str(q))
+        self.assertTrue(q==quat(0,0,0,0),"Konstruktor quat() falsch: %s"%str(q))
 
         q = quat(2.5)
-        self.failUnless(q==quat(2.5,0,0,0),
+        self.assertTrue(q==quat(2.5,0,0,0),
                         "Konstruktor quat(x) falsch: %s"%str(q))
 
 
         w = quat(7,-2,3,2)
         q = quat(w)
-        self.failUnless(q==quat(7, -2, 3, 2),
+        self.assertTrue(q==quat(7, -2, 3, 2),
                         "Konstruktor quat(quat) falsch: %s"%str(q))
         w.x = 12
-        self.failUnless(q==quat(7, -2, 3, 2),
+        self.assertTrue(q==quat(7, -2, 3, 2),
                         "Konstruktor quat(quat) legt keine Kopie an: %s"%str(q))
 
         q = quat("1.2")
-        self.failUnless(q==quat(1.2, 0, 0, 0),
+        self.assertTrue(q==quat(1.2, 0, 0, 0),
                         "Konstruktor quat(string2) falsch: %s"%str(q))
 
         v = quat("")
-        self.failUnless(v==quat(0, 0, 0, 0),
+        self.assertTrue(v==quat(0, 0, 0, 0),
                         "Konstruktor quat(string0) falsch: %s"%str(q))
 
         try:
@@ -63,50 +63,50 @@ class TestQuat_light(unittest.TestCase):
         a = quat(1,2,3,4)
         b = quat(5,6,7,8)
 
-        self.failIf(a==b,"==-Operation falsch (1)")
-        self.failUnless(a!=b,"!=-Operation falsch (1)")
+        self.assertFalse(a==b,"==-Operation falsch (1)")
+        self.assertTrue(a!=b,"!=-Operation falsch (1)")
 
         a.w=5
         a.x=6
         a.y=7
         a.z=8
-        self.failUnless(a==b, "==-Operation falsch (2)")
-        self.failIf(a!=b, "!=-Operation falsch (2)")
+        self.assertTrue(a==b, "==-Operation falsch (2)")
+        self.assertFalse(a!=b, "!=-Operation falsch (2)")
 
     ######################################################################
     def testAdd(self):
         a = quat(1.5, 2, 3, 4)
         b = quat(2, -1.2, 7, -2)
         c=a+b
-        self.failUnless(c==quat(3.5,0.8,10,2), "falsche Addition: %s"%str(c))
+        self.assertTrue(c==quat(3.5,0.8,10,2), "falsche Addition: %s"%str(c))
 
     ######################################################################
     def testSub(self):
         a = quat(1.5, 2, 3, 4)
         b = quat(2, -1.2, 7, -2)
         c=a-b
-        self.failUnless(c==quat(-0.5,3.2,-4, 6),
+        self.assertTrue(c==quat(-0.5,3.2,-4, 6),
                          "falsche Subtraktion: %s"%str(c))
 
     ######################################################################
     def testMul(self):
         a = quat(-1, 2.5, 3, 2)
         c = 2*a
-        self.failUnless(c==quat(-2,5,6,4),
+        self.assertTrue(c==quat(-2,5,6,4),
                          "falsche Multiplikation int*quat: %s"%str(c))
         c = a*2
-        self.failUnless(c==quat(-2,5,6,4),
+        self.assertTrue(c==quat(-2,5,6,4),
                          "falsche Multiplikation quat*int: %s"%str(c))
         c = a*2
-        self.failUnless(c==quat(-2,5,6,4),
+        self.assertTrue(c==quat(-2,5,6,4),
                          "falsche Multiplikation quat*long: %s"%str(c))
         c = 2.0*a
-        self.failUnless(c==quat(-2,5,6,4),
+        self.assertTrue(c==quat(-2,5,6,4),
                          "falsche Multiplikation float*quat: %s"%str(c))
 
 #        b = quat(2,4,-1,3)
 #        c = a*b
-#        self.failUnless(c==11.0,
+#        self.assertTrue(c==11.0,
 #                         "falsches Skalarprodukt: %s"%str(c))
 
         
@@ -114,7 +114,7 @@ class TestQuat_light(unittest.TestCase):
     def testDiv(self):
         a = quat(2,4,6,3)
         c = a/2.0
-        self.failUnless(c==quat(1,2,3,1.5),
+        self.assertTrue(c==quat(1,2,3,1.5),
                         "falsche Division: %s"%str(c))
 
         try:
@@ -127,10 +127,10 @@ class TestQuat_light(unittest.TestCase):
     def testPow(self):
         a = quat(1,-2,3,2).normalize()
         a = quat(a)
-        self.failUnless(a*a==a**2,
+        self.assertTrue(a*a==a**2,
                         "pow falsch: a*a != a**2")
 
-        self.failUnless(a*a==pow(a,2),
+        self.assertTrue(a*a==pow(a,2),
                         "pow falsch: a*a != a**2")
 
 
@@ -138,14 +138,14 @@ class TestQuat_light(unittest.TestCase):
     def testNeg(self):
         a = quat(1,-2,3,2)
         c = -a
-        self.failUnless(c==quat(-1,2,-3,-2),
+        self.assertTrue(c==quat(-1,2,-3,-2),
                         "Negation falsch: %s"%str(c))
 
     ######################################################################
     def testPos(self):
         a = quat(1,-2,3,2)
         c = +a
-        self.failUnless(c==quat(1,-2,3,2),
+        self.assertTrue(c==quat(1,-2,3,2),
                         "Pos falsch: %s"%str(c))
 
     ######################################################################
@@ -172,7 +172,7 @@ class TestQuat_light(unittest.TestCase):
     def testiDiv(self):
         a = quat(1.5, 2, 3, 2)
         a/=2.0
-        self.failUnless(a==quat(0.75,1,1.5,1),
+        self.assertTrue(a==quat(0.75,1,1.5,1),
                         "falsche inline Division: %s"%str(a))
 
 
@@ -180,14 +180,14 @@ class TestQuat_light(unittest.TestCase):
     def testAbs(self):
         a = quat(1, 2, 3, 4)
         c = abs(a)
-        self.failUnless(c==math.sqrt(30),
+        self.assertTrue(c==math.sqrt(30),
                         "falsches abs(): %s"%str(c))
 
     ######################################################################
     def testConjugate(self):
         a = quat(1, 2, 3, 4)
         c = a.conjugate()
-        self.failUnless(c==quat(1,-2,-3,-4),
+        self.assertTrue(c==quat(1,-2,-3,-4),
                         "falsches conjugate(): %s"%str(c))
 
 
@@ -196,7 +196,7 @@ class TestQuat_light(unittest.TestCase):
         a = quat(1,0.5,-1.8,2)
 
         c = a.normalize()
-        self.failUnless(abs(c)==1.0,
+        self.assertTrue(abs(c)==1.0,
                         "falsches normalize(): %s"%str(c))
 
         a = vec4(0,0,0,0)
@@ -211,7 +211,7 @@ class TestQuat_light(unittest.TestCase):
         a = quat(1,0.5,-1.8,2)
 
         ai = a.inverse()
-        self.failUnless(a*ai==quat(1),
+        self.assertTrue(a*ai==quat(1),
                         "quat.inverse() falsch")
 
     ######################################################################
@@ -243,7 +243,7 @@ class TestQuat_light(unittest.TestCase):
         m = mat3().rotation(0.5, vec3(0,1,0))
         q = quat().fromMat(mat3().rotation(0.5,vec3(0,1,0)))
         n = q.toMat3()
-        self.failUnless(m==n, "fromMat/toMat invalid")
+        self.assertTrue(m==n, "fromMat/toMat invalid")
 
     ######################################################################
     def testFromMat(self):
@@ -343,7 +343,7 @@ class TestQuat_light(unittest.TestCase):
         a = quat(1,-2,3,2)
         b = quat(3,0.5,-2,1)
         c = a.dot(b)
-        self.failUnless(c==-2.0,
+        self.assertTrue(c==-2.0,
                         "dot() falsch: %f != -2"%c)
      
     ######################################################################

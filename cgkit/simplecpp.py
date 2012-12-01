@@ -125,12 +125,18 @@ class PreProcessor:
         self.errstream = errstream
         
         if isinstance(source, types.StringTypes):
-            fhandle = file(source, "rt")
+            fhandle = open(source, "rt")
+            closeHandle = True
         else:
             fhandle = source
+            closeHandle = False
 
         self.output_buffer = []
-        self.preprocess(fhandle)
+        try:
+            self.preprocess(fhandle)
+        finally:
+            if closeHandle:
+                fhandle.close()
         return "\n".join(self.output_buffer)
 
     def preprocess(self, fhandle):

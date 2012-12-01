@@ -10,7 +10,7 @@ class TestBBConstructor(unittest.TestCase):
     
     def testStandardConstructor(self):
         bb = BoundingBox()
-        self.failUnless(bb.isEmpty(), "Newly constructed bbox is not empty!")
+        self.assertTrue(bb.isEmpty(), "Newly constructed bbox is not empty!")
 #        bmin, bmax = bb.getBounds()
 #        print bmin, bmax
 

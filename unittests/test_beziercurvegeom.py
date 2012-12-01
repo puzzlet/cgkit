@@ -61,7 +61,7 @@ class TestBezierCurveGeom(unittest.TestCase):
                                        BezierPoint((2,1,0)),
                                        BezierPoint((1,1,0))],
                               closed = True)
-        self.failUnless(crv2.length()>crv.length(),
+        self.assertTrue(crv2.length()>crv.length(),
                         "Curve length didn't increase: %f "%crv2.length())
 
     def testCurveLengthChange(self):

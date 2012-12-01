@@ -15,58 +15,58 @@ class TestVec3(unittest.TestCase):
     ######################################################################
     def testConstructor(self):
         v = vec3(1.5,-2,3)
-        self.failUnless(v.x==1.5 and v.y==-2.0 and v.z==3,
+        self.assertTrue(v.x==1.5 and v.y==-2.0 and v.z==3,
                         "vec3(1.5,-2,3) != %s"%str(v))
 
         v = vec3()
-        self.failUnless(v==vec3(0,0,0), "vec3() != (0,0,0) : %s"%str(v))
+        self.assertTrue(v==vec3(0,0,0), "vec3() != (0,0,0) : %s"%str(v))
 
         v = vec3(2.5)
-        self.failUnless(v==vec3(2.5,2.5,2.5),
+        self.assertTrue(v==vec3(2.5,2.5,2.5),
                         "vec3(2.5) != vec3(2.5,2.5,2.5) : %s"%str(v))
 
         v = vec3(-1.5, 42)
-        self.failUnless(v==vec3(-1.5, 42.0, 0.0),
+        self.assertTrue(v==vec3(-1.5, 42.0, 0.0),
                         "vec3(-1.5, 42) != vec3(-1.5, 42.0, 0.0) : %s"%str(v))
 
         v = vec3(())
-        self.failUnless(v==vec3(0, 0, 0),
+        self.assertTrue(v==vec3(0, 0, 0),
                         "vec3(()) != vec3(0,0,0) : %s"%str(v))
 
         v = vec3([1])
-        self.failUnless(v==vec3(1, 1, 1),
+        self.assertTrue(v==vec3(1, 1, 1),
                         "vec3([1]) != vec3(1,1,1) : %s"%str(v))
 
         v = vec3((1,2))
-        self.failUnless(v==vec3(1, 2, 0),
+        self.assertTrue(v==vec3(1, 2, 0),
                         "vec3((1,2)) != vec3(1,2,0) : %s"%str(v))
 
         v = vec3((1,2,3))
-        self.failUnless(v==vec3(1, 2, 3),
+        self.assertTrue(v==vec3(1, 2, 3),
                         "vec3((1,2,3)) != vec3(1,2,3) : %s"%str(v))
 
         w = vec3(7,-2,3)
         v = vec3(w)
-        self.failUnless(v==vec3(7, -2, 3),
+        self.assertTrue(v==vec3(7, -2, 3),
                         "vec3(vec3) : %s"%str(v))
         w.x = 12
-        self.failUnless(v==vec3(7, -2, 3),
+        self.assertTrue(v==vec3(7, -2, 3),
                         "vec3(vec3) doesn't create a copy: %s"%str(v))
 
         v = vec3("1,2,3")
-        self.failUnless(v==vec3(1, 2, 3),
+        self.assertTrue(v==vec3(1, 2, 3),
                         'vec3("1,2,3") != vec3(1,2,3) : %s'%str(v))
 
         v = vec3("1,2")
-        self.failUnless(v==vec3(1, 2, 0),
+        self.assertTrue(v==vec3(1, 2, 0),
                         'vec3("1,2") != vec3(1,2,0) : %s'%str(v))
 
         v = vec3("1")
-        self.failUnless(v==vec3(1, 1, 1),
+        self.assertTrue(v==vec3(1, 1, 1),
                         'vec3("1") != vec3(1,1,1) : %s'%str(v))
 
         v = vec3("")
-        self.failUnless(v==vec3(0, 0, 0),
+        self.assertTrue(v==vec3(0, 0, 0),
                         'vec3("") != vec3(0,0,0) : %s'%str(v))
 
         try:
@@ -94,9 +94,9 @@ class TestVec3(unittest.TestCase):
         for i in a:
             b.append(i)
 
-        self.failUnless(len(b)==3,
+        self.assertTrue(len(b)==3,
                         "Iteration should result in 3 values: %s"%str(b))
-        self.failUnless(b[0]==1.5 and b[1]==-2 and b[2]==8.3,
+        self.assertTrue(b[0]==1.5 and b[1]==-2 and b[2]==8.3,
                         "Iteration error: %s"%str(b))
 
     ######################################################################
@@ -104,60 +104,60 @@ class TestVec3(unittest.TestCase):
         a = vec3(1,2,3)
         b = vec3(5,6,7)
 
-        self.failUnless(a<b,"<-Operation falsch (1)")
-        self.failIf(b<a,"<-Operation falsch (2)")
+        self.assertTrue(a<b,"<-Operation falsch (1)")
+        self.assertFalse(b<a,"<-Operation falsch (2)")
         
-        self.failUnless(b>a,">-Operation falsch (1)")
-        self.failIf(b<a,">-Operation falsch (2)")
+        self.assertTrue(b>a,">-Operation falsch (1)")
+        self.assertFalse(b<a,">-Operation falsch (2)")
 
-        self.failIf(a==b,"==-Operation falsch (1)")
-        self.failUnless(a!=b,"!=-Operation falsch (1)")
+        self.assertFalse(a==b,"==-Operation falsch (1)")
+        self.assertTrue(a!=b,"!=-Operation falsch (1)")
 
         a.x=5
-        self.failIf(a<b,"<-Operation falsch (3)")
-        self.failIf(a>b,">-Operation falsch (3)")
-        self.failUnless(a<=b,"<=-Operation falsch (1)")
-        self.failIf(a>=b,">=-Operation falsch (1)")
+        self.assertFalse(a<b,"<-Operation falsch (3)")
+        self.assertFalse(a>b,">-Operation falsch (3)")
+        self.assertTrue(a<=b,"<=-Operation falsch (1)")
+        self.assertFalse(a>=b,">=-Operation falsch (1)")
 
         a.y=6
         a.z=7
-        self.failUnless(a==b, "==-Operation falsch (2)")
-        self.failIf(a!=b, "!=-Operation falsch (2)")
+        self.assertTrue(a==b, "==-Operation falsch (2)")
+        self.assertFalse(a!=b, "!=-Operation falsch (2)")
 
     ######################################################################
     def testAdd(self):
         a = vec3(1.5, 2, 3)
         b = vec3(2, -1.2, 7)
         c=a+b
-        self.failUnless(c==vec3(3.5,0.8,10), "falsche Addition: %s"%str(c))
+        self.assertTrue(c==vec3(3.5,0.8,10), "falsche Addition: %s"%str(c))
 
     ######################################################################
     def testSub(self):
         a = vec3(1.5, 2, 3)
         b = vec3(2, -1.2, 7)
         c=a-b
-        self.failUnless(c==vec3(-0.5,3.2,-4),
+        self.assertTrue(c==vec3(-0.5,3.2,-4),
                          "falsche Subtraktion: %s"%str(c))
 
     ######################################################################
     def testMul(self):
         a = vec3(-1, 2.5, 3)
         c = 2*a
-        self.failUnless(c==vec3(-2,5,6),
+        self.assertTrue(c==vec3(-2,5,6),
                          "falsche Multiplikation int*vec3: %s"%str(c))
         c = a*2
-        self.failUnless(c==vec3(-2,5,6),
+        self.assertTrue(c==vec3(-2,5,6),
                          "falsche Multiplikation vec3*int: %s"%str(c))
         c = a*2
-        self.failUnless(c==vec3(-2,5,6),
+        self.assertTrue(c==vec3(-2,5,6),
                          "falsche Multiplikation vec3*long: %s"%str(c))
         c = 2.0*a
-        self.failUnless(c==vec3(-2,5,6),
+        self.assertTrue(c==vec3(-2,5,6),
                          "falsche Multiplikation float*vec3: %s"%str(c))
 
         b = vec3(2,4,-1)
         c = a*b
-        self.failUnless(c==5.0,
+        self.assertTrue(c==5.0,
                          "falsches Skalarprodukt: %s"%str(c))
 
         
@@ -165,7 +165,7 @@ class TestVec3(unittest.TestCase):
     def testDiv(self):
         a = vec3(2,4,6)
         c = a/2.0
-        self.failUnless(c==vec3(1,2,3),
+        self.assertTrue(c==vec3(1,2,3),
                         "falsche Division: %s"%str(c))
 
         try:
@@ -201,14 +201,14 @@ class TestVec3(unittest.TestCase):
     def testNeg(self):
         a = vec3(1,-2,3)
         c = -a
-        self.failUnless(c==vec3(-1,2,-3),
+        self.assertTrue(c==vec3(-1,2,-3),
                         "Negation falsch: %s"%str(c))
 
     ######################################################################
     def testPos(self):
         a = vec3(1,-2,3)
         c = +a
-        self.failUnless(c==vec3(1,-2,3),
+        self.assertTrue(c==vec3(1,-2,3),
                         "Pos falsch: %s"%str(c))
 
     ######################################################################
@@ -216,41 +216,41 @@ class TestVec3(unittest.TestCase):
         a = vec3(1.5, 2, 3)
         b = vec3(2, -1.2, 7)
         a+=b
-        self.failUnless(a==vec3(3.5,0.8,10), "falsche inline Addition: %s"%str(a))
+        self.assertTrue(a==vec3(3.5,0.8,10), "falsche inline Addition: %s"%str(a))
 
     ######################################################################
     def testiSub(self):
         a = vec3(1.5, 2, 3)
         b = vec3(2, -1.2, 7)
         a-=b
-        self.failUnless(a==vec3(-0.5,3.2,-4),
+        self.assertTrue(a==vec3(-0.5,3.2,-4),
                         "falsche inline Subtraktion: %s"%str(a))
 
     ######################################################################
     def testiMul(self):
         a = vec3(1.5, 2, 3)
         a*=2
-        self.failUnless(a==vec3(3,4,6),
+        self.assertTrue(a==vec3(3,4,6),
                         "falsche inline Multiplikation: %s"%str(a))
 
     ######################################################################
     def testiDiv(self):
         a = vec3(1.5, 2, 3)
         a/=2.0
-        self.failUnless(a==vec3(0.75,1,1.5),
+        self.assertTrue(a==vec3(0.75,1,1.5),
                         "falsche inline Division: %s"%str(a))
 
     ######################################################################
     def testiMod(self):
         a = vec3(3,2.5,-1.8)
         a%=2.0
-        self.failUnless(a==vec3(1.0,0.5,0.2),
+        self.assertTrue(a==vec3(1.0,0.5,0.2),
                         "falsches inline Modulo1: %s"%str(a))
 
         a = vec3(3,2.5,-1.8)
         b = vec3(3,2,2)
         a%=b
-        self.failUnless(a==vec3(0.0,0.5,0.2),
+        self.assertTrue(a==vec3(0.0,0.5,0.2),
                         "falsches inline Modulo2: %s"%str(a))
 
     ######################################################################
@@ -263,22 +263,22 @@ class TestVec3(unittest.TestCase):
     def testLength(self):
         a = vec3(1, 2, 3)
         c = a.length()
-        self.failUnless(c==math.sqrt(14),
+        self.assertTrue(c==math.sqrt(14),
                         "falsches length(): %s"%str(c))
 
     ######################################################################
     def testGetAttr(self):
         a = vec3(1, 2, 3)
         c = a.x
-        self.failUnless(c==1,
+        self.assertTrue(c==1,
                         "falsches vec3.x: %s"%str(c))
 
         c = a.y
-        self.failUnless(c==2,
+        self.assertTrue(c==2,
                         "falsches vec3.y: %s"%str(c))
 
         c = a.z
-        self.failUnless(c==3,
+        self.assertTrue(c==3,
                         "falsches vec3.z: %s"%str(c))
 
         try:
@@ -294,7 +294,7 @@ class TestVec3(unittest.TestCase):
         a.y = 2
         a.z = 3
 
-        self.failUnless(a==vec3(1,2,3),
+        self.assertTrue(a==vec3(1,2,3),
                         "falsches setAttr: %s"%str(a))
 
 #        try:
@@ -308,15 +308,15 @@ class TestVec3(unittest.TestCase):
         a = vec3(1,2,3)
 
         c = a[0]
-        self.failUnless(c==1,
+        self.assertTrue(c==1,
                         "falsches vec3[0]: %s"%str(c))
 
         c = a[1]
-        self.failUnless(c==2,
+        self.assertTrue(c==2,
                         "falsches vec3[1]: %s"%str(c))
 
         c = a[2]
-        self.failUnless(c==3,
+        self.assertTrue(c==3,
                         "falsches vec3[2]: %s"%str(c))
 
         try:
@@ -332,7 +332,7 @@ class TestVec3(unittest.TestCase):
         a[0] = 1
         a[1] = 2
         a[2] = 3
-        self.failUnless(a==vec3(1,2,3),
+        self.assertTrue(a==vec3(1,2,3),
                         "falsches setItem: %s"%str(a))
 
         try:
@@ -349,7 +349,7 @@ class TestVec3(unittest.TestCase):
         c = a.cross(b)
 
         oldeps = setEpsilon(1E-10)
-        self.failUnless(c==vec3(1.6, 0.04, 0.9),
+        self.assertTrue(c==vec3(1.6, 0.04, 0.9),
                         "falsches cross(): %s"%str(c))
         setEpsilon(oldeps)
 
@@ -358,7 +358,7 @@ class TestVec3(unittest.TestCase):
         a = vec3(1,0.5,-1.8)
 
         c = a.normalize()
-        self.failUnless(c.length()==1.0,
+        self.assertTrue(c.length()==1.0,
                         "falsches normalize(): %s"%str(c))
 
         a = vec3(0,0,0)
@@ -386,7 +386,7 @@ class TestVec3(unittest.TestCase):
         b = vec3(1,1,0)
 
         c = a.angle(b)
-        self.failUnless(abs(c-math.pi/4)<1E-10,
+        self.assertTrue(abs(c-math.pi/4)<1E-10,
                         "falsches angle() (4): %s"%str(c))
 
         try:
@@ -424,7 +424,7 @@ class TestVec3(unittest.TestCase):
         a = vec3(1,-1,0.5)
 
         c = a.ortho()
-        self.failUnless(a*c==0.0,
+        self.assertTrue(a*c==0.0,
                         "falsches ortho(): %s"%str(c))
 
     ######################################################################

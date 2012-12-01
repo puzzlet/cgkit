@@ -200,12 +200,25 @@ class IFFReader:
         if isinstance(file, basestring):
             self.filename = file
             file = open(file, "rb")
+            closeFile = True
         else:
             self.filename = getattr(file, "name", "?")
+            closeFile = False
         
         self._file = file
         self._abortFlag = False
+       
+        try:
+            self._read(file)
+        finally:
+            if closeFile:
+                file.close()
+
+    def _read(self, file):
+        """Actual read() implementation.
         
+        file must be a file handle.
+        """ 
         # Check if this actually is a Maya IFF file
         # (and that it starts with a group tag)
         header = file.read(12)

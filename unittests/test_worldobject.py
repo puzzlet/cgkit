@@ -30,12 +30,12 @@ class TestChildHandling(unittest.TestCase):
         w = WorldObject(auto_insert=False)
         q = WorldObject(name="spam", auto_insert=False)
         w.addChild(q)
-        self.assert_(w.hasChild("spam"))
+        self.assertTrue(w.hasChild("spam"))
 
         q.name = "eggs"
         self.assertEqual(q.name, "eggs")
-        self.assert_(w.hasChild("eggs"), "renamed object couldn't be found")
-        self.failIf(w.hasChild("spam"))
+        self.assertTrue(w.hasChild("eggs"), "renamed object couldn't be found")
+        self.assertFalse(w.hasChild("spam"))
 
 class TestComparison(unittest.TestCase):
 
