@@ -147,7 +147,7 @@ Transform [ 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 ]
 ConcatTransform [ 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 ]
 TextureCoordinates 0.0 0.0 1.0 0.0 1.0 1.0 0.0 1.0
 Displacement "foo" "Ka" [ 1.0 ] "constant string mapname" [ "foo.map" ]
-Atmosphere "foo" "Ks" [ 0.5 ] "Ka" [ 1.0 ]
+Atmosphere "foo" "Ka" [ 1.0 ] "Ks" [ 0.5 ]
 Interior "foo" "Ka" [ 1.0 ] "Ks" [ 0.6 ] "constant string mapname" [ "foo.map" ]
 Exterior "foo" "Ka" [ 1.0 ]
 AreaLightSource "foo" 2.0 "Ka" [ 1.0 ]
