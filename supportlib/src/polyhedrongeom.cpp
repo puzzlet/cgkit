@@ -397,11 +397,14 @@ class PolyTriangulation
 
 // Tesselation callbacks...
 
-#if (defined(__APPLE__) || defined(MACOSX)) && defined(__GNUC__)
-typedef GLvoid (CALLBACK *TessCallback)(...);
-#else
+// As of Snow Leopard (or possibly even Leopard), the following special
+// TessCallback declaration is not needed anymore. Use it if you want to compile
+// for Tiger (OSX 10.4).
+//#if (defined(__APPLE__) || defined(MACOSX)) && defined(__GNUC__)
+//typedef GLvoid (CALLBACK *TessCallback)(...);
+//#else
 typedef GLvoid (CALLBACK *TessCallback)();
-#endif
+//#endif
 
 // Callbacks for triangulating...
 // (the callbacks receive a pointer to a PolyTriangulation object on
