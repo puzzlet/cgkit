@@ -834,14 +834,14 @@ class TestSeqUtils(unittest.TestCase):
     def testSeqCp1(self):
         """Test basic seqcp"""
         self.createSequence("tmp/spam#.txt", Range("1-5"))
-        os.system("python ../utilities/seqcp.py tmp/spam tmp/foo")
+        os.system("%s ../utilities/seqcp.py tmp/spam tmp/foo"%sys.executable)
         self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("1-5"))
         self.assertFiles("tmp/spam#.txt", "spam#.txt", Range("1-5"))
         
     def testSeqCp2(self):
         """Test seqcp -s"""
         self.createSequence("tmp/spam#.txt", Range("1-5"))
-        os.system("python ../utilities/seqcp.py tmp/spam tmp/foo -s2-3")
+        os.system("%s ../utilities/seqcp.py tmp/spam tmp/foo -s2-3"%sys.executable)
         self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("2-3"))
         if os.path.exists("tmp/foo0001.txt"):
             self.fail("foo0001.txt exists!")
@@ -852,40 +852,40 @@ class TestSeqUtils(unittest.TestCase):
     def testSeqCp3(self):
         """Test seqcp of discontinuous sequence"""
         self.createSequence("tmp/spam#.txt", Range("1-2,5"))
-        os.system("python ../utilities/seqcp.py tmp/spam tmp/foo")
+        os.system("%s ../utilities/seqcp.py tmp/spam tmp/foo"%sys.executable)
         self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("1,2,5"))
         self.assertFiles("tmp/spam#.txt", "spam#.txt", Range("1,2,5"))
 
     def testSeqCp4(self):
         """Test seqcp -d"""
         self.createSequence("tmp/spam#.txt", Range("1-2,5"))
-        os.system("python ../utilities/seqcp.py tmp/spam tmp/foo -d2-")
+        os.system("%s ../utilities/seqcp.py tmp/spam tmp/foo -d2-"%sys.executable)
         self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("2-4"), Range("1,2,5"))
         self.assertFiles("tmp/spam#.txt", "spam#.txt", Range("1,2,5"))
 
     def testSeqCp5(self):
         """Test seqcp with a sequence containing negative frames and the -n option."""
         self.createSequence("tmp/spam#.txt", Range("-2-3"))
-        os.system("python ../utilities/seqcp.py -n tmp/spam tmp/foo")
+        os.system("%s ../utilities/seqcp.py -n tmp/spam tmp/foo"%sys.executable)
         self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("-2-3"))
 
     def testSeqCp6(self):
         """Test seqcp with a sequence containing negative frames and the -N option."""
         self.createSequence("tmp/spam#.txt", Range("-2-3"))
-        os.system("python ../utilities/seqcp.py -N tmp/spam tmp/foo")
+        os.system("%s ../utilities/seqcp.py -N tmp/spam tmp/foo"%sys.executable)
         self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("-2-3"))
 
 
     def testSeqMv1(self):
         """Test basic seqmv"""
         self.createSequence("tmp/spam#.txt", Range("1-5"))
-        os.system("python ../utilities/seqmv.py tmp/spam tmp/foo")
+        os.system("%s ../utilities/seqmv.py tmp/spam tmp/foo"%sys.executable)
         self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("1-5"))
         
     def testSeqMv2(self):
         """Test seqmv -s"""
         self.createSequence("tmp/spam#.txt", Range("1-5"))
-        os.system("python ../utilities/seqmv.py tmp/spam tmp/foo -s2-3")
+        os.system("%s ../utilities/seqmv.py tmp/spam tmp/foo -s2-3"%sys.executable)
         self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("2-3"))
         if os.path.exists("tmp/foo0001.txt"):
             self.fail("foo0001.txt exists!")
@@ -895,49 +895,49 @@ class TestSeqUtils(unittest.TestCase):
     def testSeqMv3(self):
         """Test seqmv of discontinuous sequence"""
         self.createSequence("tmp/spam#.txt", Range("1-2,5"))
-        os.system("python ../utilities/seqmv.py tmp/spam tmp/foo")
+        os.system("%s ../utilities/seqmv.py tmp/spam tmp/foo"%sys.executable)
         self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("1,2,5"))
 
     def testSeqMv4(self):
         """Test seqmv -d"""
         self.createSequence("tmp/spam#.txt", Range("1-2,5"))
-        os.system("python ../utilities/seqmv.py tmp/spam tmp/foo -d2-")
+        os.system("%s ../utilities/seqmv.py tmp/spam tmp/foo -d2-"%sys.executable)
         self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("2-4"), Range("1,2,5"))
 
     def testSeqMv5(self):
         """Test seqmv of overlapping src/dst ranges (move backward)"""
         self.createSequence("tmp/spam#.txt", Range("2-8"))
-        os.system("python ../utilities/seqmv.py tmp/spam tmp/spam -d1-")
+        os.system("%s ../utilities/seqmv.py tmp/spam tmp/spam -d1-"%sys.executable)
         self.assertFiles("tmp/spam#.txt", "spam#.txt", Range("1-7"), Range("2-8"))
 
     def testSeqMv6(self):
         """Test seqmv of overlapping src/dst ranges (move forward)"""
         self.createSequence("tmp/spam#.txt", Range("2-8"))
-        os.system("python ../utilities/seqmv.py tmp/spam tmp/spam -d3-")
+        os.system("%s ../utilities/seqmv.py tmp/spam tmp/spam -d3-"%sys.executable)
         self.assertFiles("tmp/spam#.txt", "spam#.txt", Range("3-9"), Range("2-8"))
 
     def testSeqMv7(self):
         """Test seqmv of overlapping src/dst ranges (needs tmp sequence)"""
         self.createSequence("tmp/spam#.txt", Range("2-10x2"))
-        os.system("python ../utilities/seqmv.py tmp/spam tmp/spam -d4-")
+        os.system("%s ../utilities/seqmv.py tmp/spam tmp/spam -d4-"%sys.executable)
         self.assertFiles("tmp/spam#.txt", "spam#.txt", Range("4-8"), Range("2-10x2"))
 
     def testSeqMv8(self):
         """Test the -e option (to change the extension)."""
         self.createSequence("tmp/spam#.ext", Range("1-3"))
-        os.system('python ../utilities/seqmv.py "tmp/spam*.ext" tmp/foo@@.txt -e')
+        os.system('%s ../utilities/seqmv.py "tmp/spam*.ext" tmp/foo@@.txt -e'%sys.executable)
         self.assertFiles("tmp/foo@@.txt", "spam#.ext", Range("1-3"))
 
     def testSeqMv9(self):
         """Test the -n option to process negative frames."""
         self.createSequence("tmp/spam#.txt", Range("-2-3"))
-        os.system('python ../utilities/seqmv.py -n tmp/spam tmp/foo')
+        os.system('%s ../utilities/seqmv.py -n tmp/spam tmp/foo'%sys.executable)
         self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("-2-3"))
 
     def testSeqMv10(self):
         """Test the -N option to process negative frames."""
         self.createSequence("tmp/spam#.txt", Range("-2-3"))
-        os.system('python ../utilities/seqmv.py -N tmp/spam tmp/foo')
+        os.system('%s ../utilities/seqmv.py -N tmp/spam tmp/foo'%sys.executable)
         self.assertFiles("tmp/foo#.txt", "spam#.txt", Range("-2-3"))
         
         
