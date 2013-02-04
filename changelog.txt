@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Changes from cgkit-2.0.0alpha9 to cgkit-2.0.0alpha10:
+Changes from cgkit-2.0.0alpha9 to cgkit-2.0.0:
 
 New features:
 

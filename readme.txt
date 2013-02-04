@@ -26,8 +26,8 @@ Linux).
 Requirements
 ------------
 
-- Boost (v1.32)
-- SCons (v0.96.1)
+- Boost
+- SCons
 
 The following libraries are optional:
 
