@@ -26,13 +26,13 @@ recursive-include supportlib/src *.cpp
 recursive-include supportlib/pics *.png
 recursive-include supportlib/dox *.dox
 recursive-include pics *.png
-recursive-include unittests *.py
-recursive-include utilities *.py
-recursive-include utilities/3dsmax *.ms
-recursive-include utilities/maya *.mel
+include utilities/*.py
+include utilities/3dsmax/*.ms
+include utilities/maya/*.mel
 recursive-include pyrex/c *.c
 recursive-include pyrex/pyx *.pyx
-recursive-include unittests/data *.rib
-recursive-include unittests/data *.ma
-recursive-include unittests/data *.mb
-recursive-include unittests/data *.sl
+include unittests/*.py
+include unittests/data/*.rib
+include unittests/data/*.ma
+include unittests/data/*.mb
+include unittests/data/*.sl
