@@ -673,10 +673,32 @@ description = The main 'cgkit' package.
 setup(name = PACKAGE_NAME,
       version = "2.0.0",
       description = "Python Computer Graphics Kit",
+      long_description = """The Python Computer Graphics Kit is an Open Source software package
+      containing a collection of Python modules and utilities that can be used in the
+      domain of computer graphics, visual effects, animation and similar areas.
+      """,
       author = "Matthias Baas",
       author_email = "mbaas@users.sourceforge.net",
       url = "http://cgkit.sourceforge.net",
+      download_url = "http://sourceforge.net/projects/cgkit/files/",
       license = "MPL / GPL / LGPL",
+      keywords = "3d,graphics,rendering,opengl,renderman,vfx",
+      classifiers = ["Development Status :: 5 - Production/Stable",
+                     "Intended Audience :: Developers",
+                     "Intended Audience :: Education",
+                     "License :: OSI Approved :: Mozilla Public License 1.1 (MPL 1.1)",
+                     "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
+                     "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
+                     "Natural Language :: English",
+                     "Operating System :: OS Independent",
+                     "Programming Language :: C++",
+                     "Programming Language :: Python",
+                     "Topic :: Multimedia :: Graphics",
+                     "Topic :: Multimedia :: Graphics :: 3D Modeling",
+                     "Topic :: Multimedia :: Graphics :: 3D Rendering",
+                     "Topic :: Scientific/Engineering :: Visualization",
+                     "Topic :: Software Development :: Libraries :: Python Modules"
+                     ],
 
       # Process all pure Python modules in the cgkit directory
       packages = [PACKAGE_NAME,
