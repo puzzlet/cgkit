@@ -38,6 +38,11 @@ from distutils.core import setup, Extension
 from distutils.sysconfig import get_python_lib, get_config_vars
 import sys, shutil, os, os.path, time, glob, stat
 
+try:
+    from bdist_osxinst.bdist_osxinst import bdist_osxinst
+except ImportError:
+    bdist_osxinst = None
+
 ########################## Functions #################################
 
 # isNewer
@@ -653,13 +658,25 @@ if INSTALL_CGKIT_LIGHT:
 
 convertPyxFiles()
 
+bdist_osx_config = """
+[:globals:]
+title = Python Computer Graphics Kit
+license = license.txt
+
+[:scripts:]
+description = Command line utilities (requires the Python package).
+
+[cgkit]
+description = The main 'cgkit' package.
+"""
+
 setup(name = PACKAGE_NAME,
       version = "2.0.0",
       description = "Python Computer Graphics Kit",
       author = "Matthias Baas",
       author_email = "mbaas@users.sourceforge.net",
       url = "http://cgkit.sourceforge.net",
-      license = "MPL/GPL/LGPL",
+      license = "MPL / GPL / LGPL",
 
       # Process all pure Python modules in the cgkit directory
       packages = [PACKAGE_NAME,
@@ -681,7 +698,9 @@ setup(name = PACKAGE_NAME,
       ext_package = PACKAGE_NAME,
       ext_modules = ext_modules,
       scripts = scripts,
-      data_files = data_files
+      data_files = data_files,
+      cmdclass = {"bdist_osxinst":bdist_osxinst},
+      command_options = {"bdist_osxinst" : {"config_str":("setup.py",bdist_osx_config)}}
       )
 
 print ("... finished setup")
