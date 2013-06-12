@@ -38,7 +38,7 @@
 try:
 
     # Try to import the original module...
-    from Image import *
+    from PIL.Image import *
     
 except ImportError:
 

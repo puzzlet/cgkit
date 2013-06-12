@@ -38,7 +38,7 @@ import types, sys, getpass
 from cgtypes import vec3
 from ri import *
 try:
-    import Image
+    from PIL import Image
     _PIL_installed = 1
 except ImportError:
     _PIL_installed = 0

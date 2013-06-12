@@ -38,7 +38,7 @@
 try:
 
     # Try to import the original module...
-    from ImageDraw import *
+    from PIL.ImageDraw import *
     
 except ImportError:
 

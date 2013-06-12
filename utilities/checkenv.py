@@ -96,7 +96,7 @@ visualize them. You can obtain PyOpenGL at http://pyopengl.sourceforge.net/
 # Check PIL
 chkmsg("PIL")
 try:
-    import Image
+    from PIL import Image
     print "is installed"
 except:
     print "missing"

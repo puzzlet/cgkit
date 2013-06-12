@@ -34,7 +34,8 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import sys, optparse, Image
+import sys, optparse
+from PIL import Image
 
 # shift
 def shift(img, dx, dy):

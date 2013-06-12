@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Bug fixes/enhancements:
+
+- Import PIL modules via PIL instead of directly from the top-level (patch #12).
+  This allows people to use the Pillow fork instead of PIL.
+  (Thanks to Michael Gilbert for this patch)
+
+
 Changes from cgkit-2.0.0alpha9 to cgkit-2.0.0:
 
 New features:
