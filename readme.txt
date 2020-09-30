@@ -1,5 +1,5 @@
 ######################################################################
-Python Computer Graphics Kit v2.0.0
+ Amazing Python Computer Graphics Kit v2.0.0
 Copyright (C) 2002,2004 Matthias Baas (see license.txt)
 ######################################################################
 
